@@ -1,5 +1,5 @@
 const bodyParser = require("body-parser");
-const { exec } = require("child_process");
+const { exec, spawn } = require("child_process");
 const express = require("express");
 const app = express();
 const fs = require("fs");
@@ -23,34 +23,46 @@ function generateRandomString(length) {
 app.use(cors())
 app.use(bodyParser.json());
 app.post('/code',async(req,res) => {
-    var x = generateRandomString(12);
-    // const cmd = `type nul > ${x}.cpp`;
-    // exec(cmd);
-    var tempcode = req.body.code
-    // console.log(req.body.code)
-   await fs.writeFile(`${x}.cpp`,(tempcode),(err)=>{
-        if(err)
-        {
-            res.status(401).send("Error in writing file");
-        }
+  var fileName = generateRandomString(12);
+    await fs.writeFile(`${fileName}.cpp`,req.body.code,(err) => {
+      if(err)
+      {
+        console.log("error in writing code");
+        res.sendStatus(401);
+      }
     })
-    const command = `g++ ${x}.cpp -o ${x} && ${x}.exe`;
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          console.error(`Error: ${stderr}`);
-          return;
-        }
-        if(stdin) {
-          
-          return;
-        }
-        console.log(`Output: ${stdout}`);
-      })
+    
+    const compileProcess = spawn('g++',[`${fileName}.cpp`,'-o',fileName]);
+    compileProcess.stderr.on('data', (data) => {
+      console.error(`Compile error: ${data}`);
+      res.status(500).send(`Compile error: ${data}`);
+    });
+    compileProcess.on('close', (compileCode) => {
+      if (compileCode === 0) {
+        
+        const runProcess = spawn(`./${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
 
+        
+        runProcess.stdin.write('YourInputHere\n');
+        runProcess.stdin.end();
+
+        let output = '';
+        let errorOutput = '';
+
+        
+        runProcess.stdout.on('data', (data) => {
+          output += data;
+        });
+
+        runProcess.stderr.on('data', (data) => {
+          errorOutput += data;
+        });
+
+        runProcess.on('close', () => {
+          res.send({ output, error: errorOutput });
+        });
+      }
+    });
 })
 
 app.listen(port, () => {

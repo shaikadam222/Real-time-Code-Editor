@@ -22,48 +22,47 @@ function generateRandomString(length) {
 }
 app.use(cors())
 app.use(bodyParser.json());
-app.post('/code',async(req,res) => {
+app.post('/code', async (req, res) => {
   var fileName = generateRandomString(12);
-    await fs.writeFile(`./outputs/${fileName}.cpp`,req.body.code,(err) => {
-      if(err)
-      {
-        console.log("error in writing code");
-        res.sendStatus(401);
+  await fs.writeFile(`./outputs/${fileName}.cpp`, req.body.code, (err) => {
+      if (err) {
+          console.log("error in writing code");
+          res.sendStatus(401);
       }
-    })
-    
-    const compileProcess = spawn('g++',[`./outputs/${fileName}.cpp`,'-o',`./outputs/${fileName}`]);
-    compileProcess.stderr.on('data', (data) => {
+  })
+
+  const compileProcess = spawn('g++', [`./outputs/${fileName}.cpp`, '-o', `./outputs/${fileName}`]);
+  compileProcess.stderr.on('data', (data) => {
       console.error(`Compile error: ${data}`);
       res.status(500).send(`Compile error: ${data}`);
-    });
-    compileProcess.on('close', (compileCode) => {
+  });
+  compileProcess.on('close', (compileCode) => {
       if (compileCode === 0) {
-        
-        const runProcess = spawn(`./outputs/${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
 
-        
-        runProcess.stdin.write('YourInputHere\n');
-        runProcess.stdin.end();
+          const runProcess = spawn(`./outputs/${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
 
-        let output = '';
-        let errorOutput = '';
+          const userInput = 'YourInputHere\n'; // Example input provided by the user
 
-        
-        runProcess.stdout.on('data', (data) => {
-          output += data;
-        });
+          runProcess.stdin.write(userInput);
+          runProcess.stdin.end();
 
-        runProcess.stderr.on('data', (data) => {
-          errorOutput += data;
-        });
+          let output = '';
+          let errorOutput = '';
 
-        runProcess.on('close', () => {
-          res.send({ output, error: errorOutput });
-        });
+          runProcess.stdout.on('data', (data) => {
+              output += data;
+          });
+
+          runProcess.stderr.on('data', (data) => {
+              errorOutput += data;
+          });
+
+          runProcess.on('close', () => {
+              res.send({ stdout: output, stderr: errorOutput });
+          });
       }
-    });
-})
+  });
+});
 
 app.listen(port, () => {
     console.log("Listening on 3000");

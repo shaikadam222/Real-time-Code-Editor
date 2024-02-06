@@ -1,15 +1,21 @@
 function postcode() {
     const code = document.getElementById('code').value;
+    const input = document.getElementById('input').value;
+
     fetch('http://localhost:3000/code', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, input }),
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        console.log('Response from backend:', data);
+        // Display the output in the pre tag
+        document.getElementById('output').innerText = data.stdout;
+
+        console.log('Output from backend:', data.stdout);
+        console.log('Error from backend:', data.stderr);
     })
     .catch(error => {
         console.error('Error:', error);

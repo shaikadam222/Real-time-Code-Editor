@@ -2,7 +2,8 @@
 using namespace std;
 int main()
 {
-    int x;
-    cin>>x;
-    cout<<"value of x: "<<x;
+  for(int i=0;i<10;i++)
+  {
+    cout<<i<<" ";
+  }
 }

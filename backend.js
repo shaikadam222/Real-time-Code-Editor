@@ -24,7 +24,7 @@ app.use(cors())
 app.use(bodyParser.json());
 app.post('/code',async(req,res) => {
   var fileName = generateRandomString(12);
-    await fs.writeFile(`${fileName}.cpp`,req.body.code,(err) => {
+    await fs.writeFile(`./outputs/${fileName}.cpp`,req.body.code,(err) => {
       if(err)
       {
         console.log("error in writing code");
@@ -32,7 +32,7 @@ app.post('/code',async(req,res) => {
       }
     })
     
-    const compileProcess = spawn('g++',[`${fileName}.cpp`,'-o',fileName]);
+    const compileProcess = spawn('g++',[`./outputs/${fileName}.cpp`,'-o',`./outputs/${fileName}`]);
     compileProcess.stderr.on('data', (data) => {
       console.error(`Compile error: ${data}`);
       res.status(500).send(`Compile error: ${data}`);
@@ -40,7 +40,7 @@ app.post('/code',async(req,res) => {
     compileProcess.on('close', (compileCode) => {
       if (compileCode === 0) {
         
-        const runProcess = spawn(`./${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
+        const runProcess = spawn(`./outputs/${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
 
         
         runProcess.stdin.write('YourInputHere\n');

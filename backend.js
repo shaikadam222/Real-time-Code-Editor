@@ -41,7 +41,7 @@ app.post('/code', async (req, res) => {
 
           const runProcess = spawn(`./outputs/${fileName}`, { stdio: ['pipe', 'pipe', 'pipe'] });
 
-          const userInput = req.body.input; // Example input provided by the user
+          const userInput = req.body.input;
 
           runProcess.stdin.write(userInput);
           runProcess.stdin.end();

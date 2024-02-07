@@ -11,7 +11,7 @@ function postcode() {
     })
     .then(response => response.json())
     .then(data => {
-        // Display the output in the pre tag
+        
         document.getElementById('output').innerText = data.stdout;
 
         console.log('Output from backend:', data.stdout);

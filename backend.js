@@ -20,9 +20,9 @@ function generateRandomString(length) {
     
     return result;
 }
-const allowedOrigin = 'https://codeswift-git-main-shaikadam222s-projects.vercel.app/'
+const allowedOrigin = '*'
 app.use(cors({
-    origin: allowedOrigin,
+    origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // enable set cookie
 }))

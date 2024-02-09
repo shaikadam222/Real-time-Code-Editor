@@ -2,7 +2,7 @@ function postcode() {
     const code = document.getElementById('code').value;
     const input = document.getElementById('input').value;
 
-    fetch('https://main--imaginative-centaur-0345d7.netlify.app/', {
+    fetch('https://main--imaginative-centaur-0345d7.netlify.app/code', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

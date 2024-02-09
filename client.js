@@ -9,7 +9,7 @@ function postcode() {
         },
         body: JSON.stringify({ code, input }),
     })
-    .then((resp) => resp.json())
+    .then((resp) => resp.text())
     .then((data) => {
         
         document.getElementById('output').innerText = data.stdout;

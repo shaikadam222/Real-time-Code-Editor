@@ -20,7 +20,12 @@ function generateRandomString(length) {
     
     return result;
 }
-app.use(cors())
+const allowedOrigin = 'https://codeswift-git-main-shaikadam222s-projects.vercel.app/'
+app.use(cors({
+    origin: allowedOrigin,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // enable set cookie
+}))
 app.use(bodyParser.json());
 app.post('/code', async (req, res) => {
   var fileName = generateRandomString(12);

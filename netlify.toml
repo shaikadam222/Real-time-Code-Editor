@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  headers = { Access-Control-Allow-Origin = "*", Access-Control-Allow-Methods = "GET, POST, OPTIONS" }

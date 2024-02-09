@@ -5,7 +5,7 @@ const app = express();
 const fs = require("fs");
 const cors = require("cors");
 const { stdin } = require("process");
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 
 
@@ -21,11 +21,12 @@ function generateRandomString(length) {
     return result;
 }
 const allowedOrigin = '*'
-app.use(cors({
-    origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // enable set cookie
-}))
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // '*' allows any origin, consider setting it to a specific origin in production
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 app.use(bodyParser.json());
 app.post('/code', async (req, res) => {
   var fileName = generateRandomString(12);

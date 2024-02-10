@@ -4,7 +4,8 @@
   "description": "This isn't a complete project but it is under contruction it will be get ready soon",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "your-build-command"
   },
   "keywords": [],
   "author": "",

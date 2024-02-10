@@ -1,27 +1,25 @@
 function postcode() {
     const code = document.getElementById('code').value;
     const input = document.getElementById('input').value;
-    const backendUrl = 'https://main--dazzling-stardust-b9337e.netlify.app/';
 
-    fetch(`${backendUrl}`, {
+    // Get the current URL and append the path to the serverless function
+    const backendUrl = window.location.origin + '/.netlify/functions/compileCpp';
+
+    fetch(backendUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ code, input }),
     })
-    .then((resp) => {
-        
-        resp.json().then((data) => {
-            
-            document.getElementById('output').innerText = data.stdout;
-            console.log('Output from backend:', data.stdout);
-            console.log('Error from backend:', data.stderr);
+        .then((resp) => {
+            resp.json().then((data) => {
+                document.getElementById('output').innerText = data.stdout;
+                console.log('Output from backend:', data.stdout);
+                console.log('Error from backend:', data.stderr);
+            });
         })
-    }).catch(error => {
-        console.error('Error:', error);
-    });
-    
-    
-    
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 }

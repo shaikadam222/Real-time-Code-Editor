@@ -3,7 +3,7 @@ function postcode() {
     const input = document.getElementById('input').value;
 
     // Get the current URL and append the path to the serverless function
-    const backendUrl = "https://main--spectacular-sopapillas-b488e2.netlify.app/";
+    const backendUrl = "https://main--spectacular-sopapillas-b488e2.netlify.app/.netlify/functions/compileCpp";
 
     fetch(backendUrl, {
         method: 'POST',

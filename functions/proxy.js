@@ -1,30 +1,29 @@
-// functions/proxy.js
-const fetch = require('node-fetch');
-
 exports.handler = async function (event, context) {
     try {
-        // Build the URL by appending the path from the original request
         const url = `https://app.netlify.com/sites/imaginative-centaur-0345d7${event.path}`;
-        
-        // Make a request to the specified URL
         const response = await fetch(url);
 
-        // Parse the response as JSON
-        const data = await response.json();
+        // Check the response content type
+        const contentType = response.headers.get('content-type');
+        let data;
 
-        // Return the data as a response from the Netlify Function
+        if (contentType && contentType.includes('application/json')) {
+            // Parse the response as JSON if content type is JSON
+            data = await response.json();
+        } else {
+            // Handle non-JSON responses differently if needed
+            data = await response.text();
+        }
+
         return {
             statusCode: 200,
             body: JSON.stringify(data),
         };
     } catch (error) {
         console.error('Error in proxy.js:', error);
-    
-        // Return a more detailed error response
         return {
             statusCode: 500,
             body: JSON.stringify({ error: 'Internal Server Error', details: error.message }),
         };
     }
-    
 };

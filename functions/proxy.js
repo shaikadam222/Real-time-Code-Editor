@@ -18,10 +18,13 @@ exports.handler = async function (event, context) {
             body: JSON.stringify(data),
         };
     } catch (error) {
-        // Handle errors and return a response
+        console.error('Error in proxy.js:', error);
+    
+        // Return a more detailed error response
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Internal Server Error' }),
+            body: JSON.stringify({ error: 'Internal Server Error', details: error.message }),
         };
     }
+    
 };

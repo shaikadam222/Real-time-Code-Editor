@@ -3,11 +3,8 @@ exports.handler = async function (event, context) {
         const url = `https://app.netlify.com/sites/imaginative-centaur-0345d7${event.path}`;
         const response = await fetch(url);
 
-        // Check the response content type
-        const contentType = response.headers.get('content-type');
-        let data;
-
-        data = await response.text();
+        // Always retrieve the response as text
+        const data = await response.text();
 
         return {
             statusCode: 200,

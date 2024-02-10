@@ -7,13 +7,7 @@ exports.handler = async function (event, context) {
         const contentType = response.headers.get('content-type');
         let data;
 
-        if (contentType && contentType.includes('application/json')) {
-            // Parse the response as JSON if content type is JSON
-            data = await response.json();
-        } else {
-            // Handle non-JSON responses differently if needed
-            data = await response.text();
-        }
+        data = await response.text();
 
         return {
             statusCode: 200,

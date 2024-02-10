@@ -14,6 +14,7 @@ function generateRandomString(length) {
   return result;
 }
 exports.handler = async function (event, context) {
+  console.log("ASdasdasdasdqweqwe");
   try {
     const fileName = generateRandomString(12);
     console.log(fileName);

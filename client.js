@@ -2,7 +2,7 @@ function postcode() {
     const code = document.getElementById('code').value;
     const input = document.getElementById('input').value;
 
-    fetch('https://coders-iny9.onrender.com', {
+    fetch('https://coders-iny9.onrender.com/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

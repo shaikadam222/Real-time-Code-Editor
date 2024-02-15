@@ -11,13 +11,24 @@ function postcode() {
     })
     .then((response) => {
         console.log(response)
-        response.json().then(data => {
+        try{
+            response.json().then(data => {
             
-            document.getElementById('output').innerText = data.stdout;
-    
-            console.log('Output from backend:', data.stdout);
-            console.log('Error from backend:', data.stderr);
-        })
+                document.getElementById('output').innerText = data.stdout;
+                document.getElementById('error').innerText = data.stderr;
+                console.log('Output from backend:', data.stdout);
+                console.log('Error from backend:', data.stderr);
+            })
+        }catch (e)
+        {
+            response.text().then(data => {
+            
+                document.getElementById('output').innerText = data.stdout;
+                document.getElementById('error').innerText = data.stderr;
+                console.log('Output from backend:', data.stdout);
+                console.log('Error from backend:', data.stderr);
+            })
+        }
     })
     .catch(error => {
         console.error('Error:', error);

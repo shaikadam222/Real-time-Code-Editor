@@ -10,24 +10,31 @@ function postcode() {
         body: JSON.stringify({ code, input }),
     })
     .then((response) => {
-        console.log(response)
+        console.log(response.headers)
+        if(!response.ok)
+        {
+            if(response.status === 500)
+            {
+                return response.text().then(data => {
+        
+                document.getElementById('error').innerText = data;
+                })
+            }
+            else
+            {
+                console.log("server fail");
+            }
+        }
+
         try{
-            response.json().then(data => {
+            return response.json().then(data => {
             
                 document.getElementById('output').innerText = data.stdout;
-                document.getElementById('error').innerText = data.stderr;
                 console.log('Output from backend:', data.stdout);
-                console.log('Error from backend:', data.stderr);
             })
         }catch (e)
         {
-            response.text().then(data => {
-            
-                document.getElementById('output').innerText = data.stdout;
-                document.getElementById('error').innerText = data.stderr;
-                console.log('Output from backend:', data.stdout);
-                console.log('Error from backend:', data.stderr);
-            })
+            console.log(e);
         }
     })
     .catch(error => {
